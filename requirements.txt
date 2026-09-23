@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+PyMuPDF
+python-docx
+tiktoken
+pytest
