@@ -1,8 +1,9 @@
 fastapi
 uvicorn
+python-multipart
 pydantic
 python-dotenv
+pytest
 PyMuPDF
 python-docx
 tiktoken
-pytest

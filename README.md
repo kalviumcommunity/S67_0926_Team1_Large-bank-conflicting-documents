@@ -1,1 +1,11 @@
-# S67_0926_Team1_Large-bank-conflicting-documents
+# Backend
+
+FastAPI backend for document ingestion and processing.
+
+---
+
+## 🚀 Run Locally
+
+```powershell
+python -m pip install -r requirements.txt
+uvicorn app.main:app --reload
