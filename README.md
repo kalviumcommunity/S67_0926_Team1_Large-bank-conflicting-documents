@@ -1,18 +1,11 @@
 # Backend
 
-FastAPI backend for document ingestion.
+FastAPI backend for document ingestion and processing.
 
-## Run locally
+---
+
+## 🚀 Run Locally
 
 ```powershell
 python -m pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
-
-## Test
-
-```powershell
-pytest
-```
-
-Add ingestion implementation under `app/ingestion/`.
