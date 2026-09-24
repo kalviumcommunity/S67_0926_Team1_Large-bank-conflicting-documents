@@ -1,0 +1,14 @@
+BANK COMPLIANCE CIRCULAR
+Circular ID: CIRC-2026-001
+Issue Date: 2026-04-01
+Effective Date: 2026-04-15
+Status: Active
+Version: 1
+
+4.2 Transaction Approval Requirements
+
+Transactions above the applicable high-value threshold require prior approval from the designated compliance authority.
+
+The approval record must be retained with the transaction documentation.
+
+This is synthetic sample data for development only.
