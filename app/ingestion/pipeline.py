@@ -4,6 +4,7 @@ from app.ingestion.chunker import TokenAwareChunker
 from app.ingestion.cleaner import clean_text
 from app.ingestion.loaders import load_document
 from app.ingestion.metadata import build_chunk_records
+from app.validation.document_validator import quality_check_document
 
 
 def ingest_document(
@@ -22,6 +23,7 @@ def ingest_document(
         cleaned = clean_text(page["text"])
         if not cleaned:
             continue
+
         chunks = chunker.chunk_page(
             document_id=document["document_id"],
             text=cleaned,
@@ -32,6 +34,20 @@ def ingest_document(
         next_index += len(chunks)
 
     metadata = metadata or {}
+
+    quality_check_document(
+        document=document,
+        metadata=metadata,
+        chunks=[
+            {
+                "chunk_id": chunk.chunk_id,
+                "text": chunk.text,
+                "token_count": chunk.token_count,
+            }
+            for chunk in all_chunks
+        ],
+    )
+
     return build_chunk_records(
         document,
         all_chunks,
