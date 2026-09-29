@@ -7,3 +7,5 @@ pytest
 PyMuPDF
 python-docx
 tiktoken
+openai
+qdrant-client
