@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# External project repository
+S67_0926_Team1_Large-bank-conflicting-documents/
