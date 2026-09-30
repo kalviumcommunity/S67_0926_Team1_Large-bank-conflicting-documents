@@ -1,11 +1,21 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
+import Header from "../components/layout/Header";
+import Sidebar from "../components/layout/Sidebar";
 
-function AppLayout() {
+const AppLayout = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Outlet />
-    </div>
-  )
-}
+    <div className="app-shell">
+      <Sidebar />
 
-export default AppLayout
+      <div className="main-area">
+        <Header />
+
+        <main className="page-content">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default AppLayout;

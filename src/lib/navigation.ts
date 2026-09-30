@@ -1,41 +1,38 @@
-import {
-  LayoutDashboard,
-  Bot,
-  ScrollText,
-  GitCompare,
-  FileText,
-  ClipboardList,
-} from "lucide-react"
+export interface NavigationItem {
+  label: string;
+  path: string;
+  icon: string;
+}
 
-export const navigationItems = [
+export const navigationItems: NavigationItem[] = [
+  {
+    label: "Compliance Copilot",
+    path: "/",
+    icon: "✦",
+  },
   {
     label: "Dashboard",
     path: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Compliance Copilot",
-    path: "/copilot",
-    icon: Bot,
+    icon: "▦",
   },
   {
     label: "Active Rules",
     path: "/rules",
-    icon: ScrollText,
+    icon: "✓",
   },
   {
     label: "Compare Rules",
     path: "/compare",
-    icon: GitCompare,
+    icon: "⇄",
   },
   {
     label: "Documents",
     path: "/documents",
-    icon: FileText,
+    icon: "▤",
   },
   {
     label: "Audit Trail",
     path: "/audit",
-    icon: ClipboardList,
+    icon: "◷",
   },
-]
+];
