@@ -1,15 +1,21 @@
-import "./App.css"
-
-
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "./layouts/AppLayout";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-    <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-950">
-        Compliance AI
-      </h1>
-    </main>
-  )
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route
+          path="*"
+          element={<Navigate to="/dashboard" replace />}
+        />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
