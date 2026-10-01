@@ -52,7 +52,9 @@ def test_ingest_batch_isolates_document_failure(tmp_path, monkeypatch):
     assert len(records) == 1
     assert report.processed_files == 1
     assert report.failed_files == 1
-    assert report.results[1].error == "invalid source"
+    failed_result = next(result for result in report.results if result.status == "failed")
+    assert failed_result.filename == "bad.pdf"
+    assert failed_result.error == "invalid source"
 
 
 def test_manifest_is_deterministic():
