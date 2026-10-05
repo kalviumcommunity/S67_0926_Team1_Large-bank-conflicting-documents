@@ -15,6 +15,15 @@ def ingest_document(
     metadata: Optional[Dict] = None,
 ) -> List[Dict]:
     document = load_document(file_path)
+    metadata = dict(metadata or {})
+
+    # A caller-supplied document_id is the stable identity used by the
+    # production ingestion service. This prevents two different files with
+    # the same filename stem from generating colliding chunk IDs.
+    requested_document_id = metadata.get("document_id")
+    if requested_document_id:
+        document["document_id"] = requested_document_id
+
     chunker = TokenAwareChunker(chunk_size=chunk_size, overlap=overlap)
     all_chunks = []
     next_index = 0
@@ -32,8 +41,6 @@ def ingest_document(
         )
         all_chunks.extend(chunks)
         next_index += len(chunks)
-
-    metadata = metadata or {}
 
     quality_check_document(
         document=document,
