@@ -2135,3 +2135,250 @@
     padding-right: 12px;
   }
 }
+
+/* ============================= */
+/* DAY 9 - RULE DETAILS          */
+/* ============================= */
+
+.rule-details-page {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.rule-details-top {
+  margin-bottom: 16px;
+}
+
+.back-button {
+  border: none;
+  background: transparent;
+  color: #1745c4;
+  padding: 0;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.rule-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.rule-details-header h2 {
+  margin: 6px 0;
+  color: #18243a;
+  font-size: 25px;
+  letter-spacing: -0.5px;
+}
+
+.rule-details-header p {
+  max-width: 700px;
+  margin: 0;
+  color: #778195;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.rule-detail-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  background: #eaf7ef;
+  color: #16804e;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.rule-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.rule-info-card {
+  padding: 16px;
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.rule-info-card .card-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.rule-info-card strong {
+  color: #253047;
+  font-size: 12px;
+}
+
+.rule-detail-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.rule-detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rule-detail-card {
+  padding: 20px;
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.rule-detail-card h3 {
+  margin: 5px 0 16px;
+  color: #18243a;
+  font-size: 15px;
+}
+
+.rule-detail-card .card-header {
+  margin-bottom: 5px;
+}
+
+.requirement-text {
+  margin: 15px 0 0;
+  padding: 16px;
+  background: #f7f9fc;
+  border: 1px solid #e6eaf0;
+  border-radius: 6px;
+  color: #536075;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.compliance-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-top: 1px solid #edf0f4;
+}
+
+.check-icon {
+  width: 23px;
+  height: 23px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf7ef;
+  color: #16804e;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.compliance-check strong,
+.compliance-check span {
+  display: block;
+}
+
+.compliance-check strong {
+  color: #354159;
+  font-size: 10px;
+}
+
+.compliance-check span {
+  margin-top: 4px;
+  color: #8a94a5;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.rule-detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reference-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-top: 1px solid #edf0f4;
+}
+
+.reference-row span:first-child {
+  color: #8a94a5;
+  font-size: 9px;
+}
+
+.reference-row strong {
+  color: #354159;
+  font-size: 9px;
+}
+
+.reference-active {
+  color: #16804e !important;
+}
+
+.source-description {
+  margin: -5px 0 15px;
+  color: #8a94a5;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.rule-detail-sidebar .secondary-button {
+  margin-bottom: 8px;
+}
+
+.rule-detail-sidebar .primary-button {
+  margin-top: 0;
+}
+
+.rule-not-found {
+  padding: 50px;
+  text-align: center;
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.rule-not-found h2 {
+  margin: 0 0 8px;
+  color: #18243a;
+}
+
+.rule-not-found p {
+  margin: 0 0 20px;
+  color: #778195;
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .rule-detail-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rule-detail-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .rule-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rule-details-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

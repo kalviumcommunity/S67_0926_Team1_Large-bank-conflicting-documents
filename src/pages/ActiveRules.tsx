@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Rule = {
   id: number;
@@ -75,6 +76,7 @@ const rules: Rule[] = [
 ];
 
 function ActiveRules() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [regulatorFilter, setRegulatorFilter] = useState("All");
   const [riskFilter, setRiskFilter] = useState("All");
@@ -219,7 +221,10 @@ function ActiveRules() {
                   </td>
 
                   <td>
-                    <button className="view-rule-button">
+                    <button
+                      className="view-rule-button"
+                      onClick={() => navigate(`/rules/${rule.id}`)}
+                    >
                       View
                     </button>
                   </td>
