@@ -5,6 +5,7 @@ import ActiveRules from "./pages/ActiveRules";
 import CompareRules from "./pages/CompareRules";
 import Documents from "./pages/Documents";
 import AuditTrail from "./pages/AuditTrail";
+import ComplianceCopilot from "./pages/ComplianceCopilot";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/compare" element={<CompareRules />} />
         <Route path="/documents" element={<Documents />} />
         <Route path="/audit" element={<AuditTrail />} />
+        <Route path="/copilot" element={<ComplianceCopilot />} />
 
         <Route
           path="*"

@@ -7,7 +7,7 @@ export interface NavigationItem {
 export const navigationItems: NavigationItem[] = [
   {
     label: "Compliance Copilot",
-    path: "/",
+    path: "/copilot",
     icon: "✦",
   },
   {
