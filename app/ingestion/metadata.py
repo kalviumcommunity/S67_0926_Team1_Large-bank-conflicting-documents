@@ -15,13 +15,20 @@ def build_chunk_records(
     status: str = "unknown",
     version: Optional[str] = None,
 ) -> List[Dict]:
+    """
+    Build vector-store records from validated compliance metadata.
+
+    Do not fall back to the loader's physical file type (`pdf`/`docx`) as
+    `document_type`. Those are transport formats, not compliance categories.
+    """
     records = []
+
     for chunk in chunks:
         record = asdict(chunk)
         record.update(
             {
                 "filename": document["filename"],
-                "document_type": document_type or document["document_type"],
+                "document_type": document_type,
                 "title": title or document["filename"],
                 "issue_date": issue_date,
                 "effective_date": effective_date,
@@ -30,4 +37,5 @@ def build_chunk_records(
             }
         )
         records.append(record)
+
     return records

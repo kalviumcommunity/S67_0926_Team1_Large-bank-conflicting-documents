@@ -3,4 +3,9 @@ __pycache__/
 .pytest_cache/
 .env
 data/processed/
+data/uploads/
+data/ingestion_manifest.db
+data/ingestion_manifest.db-shm
+data/ingestion_manifest.db-wal
+data/ingestion_manifest.json
 *.pyc
