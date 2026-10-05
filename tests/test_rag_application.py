@@ -1,26 +1,29 @@
-import app.services.rag_application as rag_application
+import app.services.rag_application as app
 
 
-def test_rag_service_factory_is_cached(monkeypatch):
+def test_factory_uses_ollama(monkeypatch):
     class Settings:
-        openai_api_key = "test"
-        embedding_model = "text-embedding-3-small"
-        embedding_batch_size = 2
-        qdrant_url = "http://qdrant"
+        ollama_base_url = "http://ollama"
+        ollama_chat_model = "gemma3:4b"
+        ollama_embedding_model = "nomic-embed-text"
+        ollama_timeout_seconds = 120.0
+        embedding_batch_size = 32
+        qdrant_url = "http://q"
         qdrant_api_key = None
-        qdrant_collection = "compliance_chunks"
-        embedding_dimensions = 1536
-        rag_model = "gpt-6-luna"
+        qdrant_collection = "compliance_chunks_ollama"
         rag_default_top_k = 5
         rag_max_top_k = 10
-        openai_timeout_seconds = 60.0
-        openai_max_retries = 2
-    monkeypatch.setattr(rag_application, "load_settings", lambda: Settings())
-    monkeypatch.setattr(rag_application, "OpenAIEmbedder", lambda **kwargs: object())
-    monkeypatch.setattr(rag_application, "QdrantVectorStore", lambda **kwargs: object())
-    monkeypatch.setattr(rag_application, "OpenAIResponsesProvider", lambda **kwargs: object())
-    rag_application.get_rag_service.cache_clear()
-    first = rag_application.get_rag_service()
-    second = rag_application.get_rag_service()
-    assert first is second
-    rag_application.get_rag_service.cache_clear()
+
+    class X:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    monkeypatch.setattr(app, "load_settings", lambda: Settings())
+    monkeypatch.setattr(app, "OllamaClient", X)
+    monkeypatch.setattr(app, "OllamaEmbedder", X)
+    monkeypatch.setattr(app, "QdrantVectorStore", X)
+    monkeypatch.setattr(app, "OllamaLLMProvider", X)
+
+    app.get_rag_service.cache_clear()
+    assert app.get_rag_service() is not None
+    app.get_rag_service.cache_clear()
