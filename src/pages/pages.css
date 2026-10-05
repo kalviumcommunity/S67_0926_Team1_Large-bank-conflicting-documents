@@ -648,3 +648,369 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================= */
+/* DAY 5 - COMPARE RULES         */
+/* ============================= */
+
+.compare-page {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.compare-page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.compare-page-heading h2 {
+  margin: 6px 0;
+  font-size: 25px;
+  letter-spacing: -0.5px;
+}
+
+.compare-page-heading p {
+  margin: 0;
+  color: #778195;
+  font-size: 12px;
+}
+
+.comparison-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  background: #eaf7ef;
+  color: #16804e;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* RULE SELECTORS */
+
+.compare-selector-card {
+  display: grid;
+  grid-template-columns: 1fr 55px 1fr;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  margin-bottom: 16px;
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.compare-selector {
+  display: flex;
+  flex-direction: column;
+}
+
+.compare-label {
+  color: #7d8798;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  margin-bottom: 7px;
+}
+
+.compare-selector select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #dce1e9;
+  border-radius: 6px;
+  background: white;
+  color: #26334a;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+}
+
+.selector-hint {
+  color: #98a1b1;
+  font-size: 8px;
+  margin-top: 5px;
+}
+
+.compare-vs {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f4fa;
+  border-radius: 50%;
+  color: #1745c4;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* RULE OVERVIEW */
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.comparison-rule-card {
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.comparison-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.comparison-card-header h3 {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.rule-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #edf0f4;
+}
+
+.rule-meta-grid span,
+.rule-meta-grid strong {
+  display: block;
+}
+
+.rule-meta-grid span {
+  color: #8a94a5;
+  font-size: 8px;
+  margin-bottom: 5px;
+}
+
+.rule-meta-grid strong {
+  color: #26334a;
+  font-size: 9px;
+}
+
+/* SUMMARY */
+
+.comparison-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+}
+
+.summary-item strong {
+  color: #d34d38;
+  font-size: 20px;
+}
+
+.summary-item span {
+  color: #7d8798;
+  font-size: 8px;
+  margin-top: 5px;
+}
+
+.summary-item.match-summary strong {
+  color: #16804e;
+}
+
+/* DETAIL COMPARISON */
+
+.comparison-detail-card {
+  background: white;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.comparison-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.comparison-detail-header h3 {
+  margin: 5px 0 0;
+  font-size: 15px;
+}
+
+.conflict-badge {
+  background: #fff0ed;
+  color: #d34d38;
+  padding: 6px 9px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 55px 1fr;
+  gap: 15px;
+  align-items: stretch;
+  padding: 18px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.comparison-field {
+  background: #f8f9fb;
+  border: 1px solid #edf0f4;
+  border-radius: 6px;
+  padding: 13px;
+}
+
+.comparison-field > span {
+  display: block;
+  color: #8a94a5;
+  font-size: 8px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.comparison-field strong {
+  color: #26334a;
+  font-size: 14px;
+}
+
+.comparison-field p {
+  color: #536075;
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.comparison-middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-middle span {
+  color: #98a1b1;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+/* ANALYSIS */
+
+.conflict-analysis-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #fffaf8;
+  border: 1px solid #f2ddd7;
+  border-radius: 8px;
+}
+
+.analysis-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff0ed;
+  color: #d34d38;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.conflict-analysis-card h3 {
+  margin: 5px 0;
+  font-size: 13px;
+}
+
+.conflict-analysis-card p {
+  margin: 0;
+  color: #778195;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.conflict-analysis-card .primary-button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .compare-selector-card {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-vs {
+    margin: 0 auto;
+  }
+
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .compare-page-heading {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .comparison-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .rule-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .comparison-middle {
+    padding: 4px;
+  }
+
+  .conflict-analysis-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .conflict-analysis-card .primary-button {
+    margin-left: 0;
+  }
+}
