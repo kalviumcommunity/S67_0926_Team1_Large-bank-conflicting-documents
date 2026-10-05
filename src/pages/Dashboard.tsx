@@ -1,6 +1,46 @@
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+const ruleTrendData = [
+  { week: "Week 1", rules: 980 },
+  { week: "Week 2", rules: 1050 },
+  { week: "Week 3", rules: 1110 },
+  { week: "Week 4", rules: 1180 },
+  { week: "Current", rules: 1248 },
+];
+
+const recentActivity = [
+  {
+    action: "Rule updated",
+    document: "FinCEN Circular 2024-04",
+    time: "12 minutes ago",
+    status: "Updated",
+  },
+  {
+    action: "Conflict detected",
+    document: "OCC Bulletin 2024-17",
+    time: "38 minutes ago",
+    status: "Review",
+  },
+  {
+    action: "Document added",
+    document: "AML Regulatory Update",
+    time: "1 hour ago",
+    status: "New",
+  },
+];
+
 const Dashboard = () => {
   return (
     <div className="dashboard-page">
+      {/* PAGE HEADER */}
       <div className="page-heading">
         <div>
           <span className="eyebrow">EXECUTIVE RISK & COMPLIANCE</span>
@@ -18,32 +58,34 @@ const Dashboard = () => {
         </button>
       </div>
 
+      {/* STAT CARDS */}
       <section className="stats-grid">
         <div className="stat-card">
           <span>ACTIVE GOVERNING RULES</span>
           <strong>1,248</strong>
-          <small>↑ 14 this quarter</small>
+          <small className="positive">↑ 14 this quarter</small>
         </div>
 
         <div className="stat-card">
           <span>RULE CONFLICTS</span>
           <strong>38</strong>
-          <small>5 require review</small>
+          <small className="negative">5 require review</small>
         </div>
 
         <div className="stat-card">
           <span>AVG. RESOLUTION TIME</span>
           <strong>1.4s</strong>
-          <small>↓ 23% from last month</small>
+          <small className="positive">↓ 23% from last month</small>
         </div>
 
         <div className="stat-card warning">
           <span>PENDING REVIEW</span>
           <strong>5</strong>
-          <small>Priority attention</small>
+          <small className="negative">Priority attention</small>
         </div>
       </section>
 
+      {/* CHART + VERIFICATION */}
       <section className="dashboard-grid">
         <div className="dashboard-card large-card">
           <div className="card-header">
@@ -55,19 +97,43 @@ const Dashboard = () => {
             <span className="badge">LIVE</span>
           </div>
 
-          <div className="chart-placeholder">
-            <div className="chart-line"></div>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={ruleTrendData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
 
-            <div className="chart-labels">
-              <span>Week 1</span>
-              <span>Week 2</span>
-              <span>Week 3</span>
-              <span>Week 4</span>
-              <span>Current</span>
-            </div>
+                <XAxis
+                  dataKey="week"
+                  tick={{ fontSize: 10 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+
+                <YAxis
+                  tick={{ fontSize: 10 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+
+                <Tooltip />
+
+                <Line
+                  type="monotone"
+                  dataKey="rules"
+                  stroke="#1745c4"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
+        {/* RULE VERIFIER */}
         <div className="dashboard-card">
           <div className="card-header">
             <div>
@@ -83,6 +149,9 @@ const Dashboard = () => {
             <span>Jurisdiction</span>
             <strong>United States</strong>
 
+            <span>Transaction Type</span>
+            <strong>Cross-border Transfer</strong>
+
             <button className="primary-button full-width">
               Run Rule Validation
             </button>
@@ -90,6 +159,7 @@ const Dashboard = () => {
         </div>
       </section>
 
+      {/* CONFLICT QUEUE */}
       <section className="dashboard-card">
         <div className="card-header">
           <div>
@@ -97,9 +167,7 @@ const Dashboard = () => {
             <h3>Rules Requiring Attention</h3>
           </div>
 
-          <button className="text-button">
-            View all
-          </button>
+          <button className="text-button">View all</button>
         </div>
 
         <div className="conflict-list">
@@ -128,6 +196,52 @@ const Dashboard = () => {
               Review
             </button>
           </div>
+
+          <div className="conflict-row">
+            <div>
+              <strong>AML Regulatory Update</strong>
+              <span>Suspicious transaction monitoring</span>
+            </div>
+
+            <span className="risk low">LOW</span>
+
+            <button className="secondary-button">
+              Review
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* RECENT ACTIVITY */}
+      <section className="dashboard-card">
+        <div className="card-header">
+          <div>
+            <span className="card-label">AUDIT ACTIVITY</span>
+            <h3>Recent Compliance Activity</h3>
+          </div>
+
+          <button className="text-button">View audit trail</button>
+        </div>
+
+        <div className="activity-list">
+          {recentActivity.map((activity, index) => (
+            <div className="activity-row" key={index}>
+              <div className="activity-indicator"></div>
+
+              <div className="activity-info">
+                <strong>{activity.action}</strong>
+                <span>{activity.document}</span>
+              </div>
+
+              <span className="activity-time">
+                {activity.time}
+              </span>
+
+              <span className="activity-status">
+                {activity.status}
+              </span>
+            </div>
+          ))}
         </div>
       </section>
     </div>
