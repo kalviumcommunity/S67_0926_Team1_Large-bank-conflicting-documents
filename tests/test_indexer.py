@@ -9,10 +9,12 @@ class FakeEmbedder:
 class FakeVectorStore:
     def __init__(self):
         self.ensure_called = False
+        self.vector_size = None
         self.received = None
 
-    def ensure_collection(self):
+    def ensure_collection(self, *, vector_size=None):
         self.ensure_called = True
+        self.vector_size = vector_size
 
     def upsert_chunks(self, chunks, embeddings):
         self.received = (chunks, embeddings)
@@ -21,9 +23,14 @@ class FakeVectorStore:
 def test_index_chunks_returns_count_and_indexes():
     store = FakeVectorStore()
     indexer = DocumentIndexer(FakeEmbedder(), store)
-    chunks = [{"chunk_id": "C1", "text": "one"}, {"chunk_id": "C2", "text": "two"}]
+    chunks = [
+        {"chunk_id": "C1", "text": "one"},
+        {"chunk_id": "C2", "text": "two"},
+    ]
+
     assert indexer.index_chunks(chunks) == 2
     assert store.ensure_called
+    assert store.vector_size == 3
     assert len(store.received[0]) == 2
     assert len(store.received[1]) == 2
 
