@@ -56,37 +56,15 @@ class ManifestStore:
                     indexed_count INTEGER,
                     error_code TEXT,
                     error_message TEXT,
-                    metadata_json TEXT NOT NULL DEFAULT '{}',
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
                 )
                 """
             )
-
-            columns = {
-                row["name"]
-                for row in connection.execute(
-                    "PRAGMA table_info(ingestion_manifest)"
-                ).fetchall()
-            }
-            if "metadata_json" not in columns:
-                connection.execute(
-                    """
-                    ALTER TABLE ingestion_manifest
-                    ADD COLUMN metadata_json TEXT NOT NULL DEFAULT '{}'
-                    """
-                )
-
             connection.execute(
                 """
                 CREATE INDEX IF NOT EXISTS idx_ingestion_document_id
                 ON ingestion_manifest(document_id)
-                """
-            )
-            connection.execute(
-                """
-                CREATE INDEX IF NOT EXISTS idx_ingestion_status_updated
-                ON ingestion_manifest(status, updated_at DESC)
                 """
             )
 
@@ -106,6 +84,8 @@ class ManifestStore:
             with self.legacy_json_path.open("r", encoding="utf-8") as handle:
                 legacy = json.load(handle)
         except (OSError, json.JSONDecodeError):
+            # Do not prevent startup because an old optional manifest is
+            # malformed; the SQLite manifest remains authoritative.
             return
 
         if not isinstance(legacy, dict):
@@ -128,17 +108,6 @@ class ManifestStore:
                 },
             )
 
-    @staticmethod
-    def _decode_row(row: sqlite3.Row | Dict[str, Any]) -> Dict[str, Any]:
-        record = dict(row)
-        raw_metadata = record.pop("metadata_json", "{}")
-        try:
-            metadata = json.loads(raw_metadata) if raw_metadata else {}
-        except (TypeError, json.JSONDecodeError):
-            metadata = {}
-        record["metadata"] = metadata if isinstance(metadata, dict) else {}
-        return record
-
     def load(self) -> Dict[str, Dict[str, Any]]:
         with self._connect() as connection:
             rows = connection.execute(
@@ -150,7 +119,7 @@ class ManifestStore:
             ).fetchall()
 
         return {
-            row["document_key"]: self._decode_row(row)
+            row["document_key"]: dict(row)
             for row in rows
         }
 
@@ -165,7 +134,7 @@ class ManifestStore:
                 (document_key,),
             ).fetchone()
 
-        return self._decode_row(row) if row else None
+        return dict(row) if row else None
 
     def find_latest_by_document_id(
         self,
@@ -183,34 +152,7 @@ class ManifestStore:
                 (document_id,),
             ).fetchone()
 
-        return self._decode_row(row) if row else None
-
-    def list_records(
-        self,
-        *,
-        status: Optional[str] = None,
-        limit: int = 100,
-        offset: int = 0,
-    ) -> list[Dict[str, Any]]:
-        if limit <= 0 or limit > 1000:
-            raise ValueError("limit must be between 1 and 1000")
-        if offset < 0:
-            raise ValueError("offset must be non-negative")
-
-        query = "SELECT * FROM ingestion_manifest"
-        params: list[Any] = []
-
-        if status:
-            query += " WHERE status = ?"
-            params.append(status)
-
-        query += " ORDER BY updated_at DESC LIMIT ? OFFSET ?"
-        params.extend([limit, offset])
-
-        with self._connect() as connection:
-            rows = connection.execute(query, tuple(params)).fetchall()
-
-        return [self._decode_row(row) for row in rows]
+        return dict(row) if row else None
 
     def claim(
         self,
@@ -220,12 +162,18 @@ class ManifestStore:
         file_hash: str,
         filename: str,
         version: Optional[str],
-        metadata: Optional[Dict[str, Any]] = None,
-        processing_ttl_seconds: int = 1800,
+        processing_ttl_seconds: int,
     ) -> tuple[bool, Optional[Dict[str, Any]]]:
-        """Atomically claim a document for processing."""
+        """
+        Atomically claim a document for processing.
+
+        Returns:
+          (True, None) when this worker owns processing.
+          (False, existing_record) when another completed/fresh job owns it.
+
+        Failed records and stale processing records may be reclaimed.
+        """
         now = utc_now()
-        metadata_json = _serialize_metadata(metadata)
 
         with self._connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
@@ -251,7 +199,7 @@ class ManifestStore:
             existing = by_key or by_hash
 
             if existing:
-                record = self._decode_row(existing)
+                record = dict(existing)
                 status = record["status"]
 
                 if status == "indexed":
@@ -274,12 +222,8 @@ class ManifestStore:
                         filename = ?,
                         version = ?,
                         status = 'processing',
-                        stored_path = NULL,
-                        chunk_count = NULL,
-                        indexed_count = NULL,
                         error_code = NULL,
                         error_message = NULL,
-                        metadata_json = ?,
                         updated_at = ?
                     WHERE document_key = ?
                     """,
@@ -289,7 +233,6 @@ class ManifestStore:
                         file_hash,
                         filename,
                         version,
-                        metadata_json,
                         now,
                         record["document_key"],
                     ),
@@ -306,11 +249,10 @@ class ManifestStore:
                     filename,
                     version,
                     status,
-                    metadata_json,
                     created_at,
                     updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, 'processing', ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, 'processing', ?, ?)
                 """,
                 (
                     document_key,
@@ -318,7 +260,6 @@ class ManifestStore:
                     file_hash,
                     filename,
                     version,
-                    metadata_json,
                     now,
                     now,
                 ),
@@ -401,7 +342,6 @@ class ManifestStore:
 
     def save(self, document_key: str, record: Dict[str, Any]) -> None:
         now = record.get("updated_at") or utc_now()
-        metadata_json = _serialize_metadata(record.get("metadata"))
 
         with self._connect() as connection:
             connection.execute(
@@ -418,11 +358,10 @@ class ManifestStore:
                     indexed_count,
                     error_code,
                     error_message,
-                    metadata_json,
                     created_at,
                     updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(document_key) DO UPDATE SET
                     document_id = excluded.document_id,
                     file_hash = excluded.file_hash,
@@ -434,7 +373,6 @@ class ManifestStore:
                     indexed_count = excluded.indexed_count,
                     error_code = excluded.error_code,
                     error_message = excluded.error_message,
-                    metadata_json = excluded.metadata_json,
                     updated_at = excluded.updated_at
                 """,
                 (
@@ -449,26 +387,10 @@ class ManifestStore:
                     record.get("indexed_count"),
                     record.get("error_code"),
                     record.get("error_message"),
-                    metadata_json,
                     record.get("created_at") or now,
                     now,
                 ),
             )
-
-
-def _serialize_metadata(metadata: Optional[Dict[str, Any]]) -> str:
-    if not metadata:
-        return "{}"
-    try:
-        value = json.dumps(
-            dict(metadata),
-            sort_keys=True,
-            separators=(",", ":"),
-            ensure_ascii=False,
-        )
-    except (TypeError, ValueError) as exc:
-        raise ValueError("ingestion metadata must be JSON serializable") from exc
-    return value
 
 
 def file_sha256(path: str) -> str:
